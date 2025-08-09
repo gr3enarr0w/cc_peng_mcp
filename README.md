@@ -18,6 +18,7 @@ An advanced Model Context Protocol (MCP) server that intelligently engineers and
 - Language-specific prompt enhancement
 - Task complexity detection
 - Claude Code capability awareness
+- **No external API dependencies** - works entirely with built-in capabilities
 
 ## Installation & Setup
 
@@ -26,49 +27,52 @@ An advanced Model Context Protocol (MCP) server that intelligently engineers and
 npm install
 ```
 
-### 2. Set Environment Variable
-Make sure your `ANTHROPIC_API_KEY` is set in your environment:
-```bash
-export ANTHROPIC_API_KEY="your-api-key-here"
+### 2. Configure Claude Code
+
+Create or update your `.mcp.json` configuration file:
+
+```json
+{
+  "mcpServers": {
+    "prompt-engineer": {
+      "command": "node",
+      "args": ["/absolute/path/to/cc_peng_mcp/index.ts"],
+      "env": {}
+    }
+  }
+}
 ```
 
-### 3. MCP Configuration
-The server is automatically configured in your `~/.mcp.json` file as `prompt-engineer`.
+### 3. Restart Claude Code
+```bash
+# Exit current session and start new one
+claude
+```
+
+### 4. Verify Installation
+```bash
+/mcp
+```
+
+You should see `prompt-engineer` listed as connected.
 
 ## Usage with Claude Code
 
-### 🎯 **Natural Language Auto-Optimization (Recommended)**
-Just type naturally - the system detects and optimizes automatically, asking questions when needed:
+### 🎯 **Auto-Optimization (Primary Usage)**
+Simply use the tools directly - no setup required:
 
-**Simple/Clear Request (Direct Optimization):**
 ```
-/prompt-engineer auto_optimize text="create a React component for user profile display with avatar and name"
-```
-
-**Vague Request (Auto-Questions):**
-```  
-/prompt-engineer auto_optimize text="fix my app"
-```
-→ System detects vagueness and automatically asks clarifying questions
-
-**Force Interactive Mode:**
-```
-/prompt-engineer auto_optimize text="optimize performance" interactive=true
+Use the auto_optimize tool to analyze: "fix my React app performance issues"
 ```
 
-### Basic Prompt Engineering
+### **Interactive Mode for Complex Requests**
 ```
-/prompt-engineer engineer_prompt prompt="fix this bug" language="typescript"
-```
-
-### Interactive Mode (For Complex Requests)
-```
-/prompt-engineer engineer_prompt prompt="create a new feature" interactive=true
+Use the engineer_prompt tool with interactive=true for: "create a new authentication system"
 ```
 
-### With Context
+### **Direct Prompt Engineering**
 ```
-/prompt-engineer engineer_prompt prompt="optimize performance" context="React app with 10k users" language="javascript"
+Use the engineer_prompt tool with prompt="optimize my database queries" and language="python"
 ```
 
 ## Available Tools
@@ -77,6 +81,7 @@ Just type naturally - the system detects and optimizes automatically, asking que
 Automatically detects and optimizes natural language text:
 - `text` (required): Your natural language text/request  
 - `context` (optional): Additional project context
+- `interactive` (optional): Force interactive questioning
 
 ### `engineer_prompt`
 Manual prompt engineering with specific parameters:
@@ -100,18 +105,11 @@ The system automatically identifies when your text is natural language that need
 - **Questions**: "how do", "what is", "why is"
 - **Conversational markers**: "i'm", "i think", "not sure"
 
-**🤔 Automatic Questioning Triggers:**
-The system asks clarifying questions when it detects:
-- **Vague requests**: "fix this", "make it better", "optimize my code"
-- **Brief requests**: Very short text that lacks details
-- **Uncertainty markers**: "not sure", "don't know", "confused"
-- **General terms**: "app", "system", "project" without specifics
-
-### 2. **Language & Task Detection**
-Once identified as a prompt, the system analyzes to detect:
-- Programming language (JavaScript, Python, TypeScript, etc.)
-- Task type (debug, test, refactor, explain, architecture)
-- Complexity level (simple, moderate, complex)
+### 2. **Built-in Intelligence**
+- **No API calls required** - uses pattern matching and rule-based optimization
+- **Language detection** via regex patterns for 10+ programming languages
+- **Task type detection** (debug, test, refactor, explain, architecture)
+- **Complexity analysis** based on text length and technical indicators
 
 ### 3. **Claude Code Optimization**
 Prompts are optimized knowing Claude Code's capabilities:
@@ -123,7 +121,7 @@ Prompts are optimized knowing Claude Code's capabilities:
 - GitHub integration
 
 ### 4. **Interactive Refinement**
-When `interactive=true`, the system:
+When needed, the system:
 - Generates clarifying questions based on your prompt
 - Creates a session to track the conversation
 - Refines the prompt based on your answers
@@ -131,111 +129,78 @@ When `interactive=true`, the system:
 
 ## Example Workflows
 
-### 🎯 **Natural Language Auto-Optimization**
+### 🎯 **Auto-Optimization Example**
 
-**Input:** Your natural language text
+**Input:**
 ```
-"i often write out sentences or things as im doing now, that would be my prompt to fix....i need my natural language translated to a prompt"
-```
-
-**Command:**
-```
-/prompt-engineer auto_optimize text="i often write out sentences or things as im doing now, that would be my prompt to fix....i need my natural language translated to a prompt"
+"my website is slow and users are complaining"
 ```
 
-**Output:**
+**Auto-Optimized Output:**
 ```
-🚀 Auto-Optimized Prompt for Claude Code:
+**Task:** Debug and fix the following issue:
 
-I need you to help me set up an automated system that can translate my natural, conversational writing style into optimized prompts for Claude Code. Here's what I need:
+my website is slow and users are complaining
 
-**Context:**
-- I often write in a stream-of-consciousness style with incomplete sentences
-- My requests are usually buried in casual language that needs to be extracted and structured
-- I want this to work seamlessly without having to manually reformat my thoughts
+**Requirements:**
+- Use file search tools (Grep/Glob) to locate relevant code
+- Read and analyze the problematic files
+- Identify the root cause and implement a fix
+- Test the solution if possible
 
-**Tasks:**
-1. **Natural Language Processing Setup:**
-   - Create a system that can detect when my casual writing contains actionable requests
-   - Build pattern recognition for common request types (fix, create, optimize, explain)
-   - Implement automatic extraction of the core technical requirements
-
-2. **Prompt Optimization Pipeline:**
-   - Transform informal language into structured, actionable prompts
-   - Add proper context and constraints that Claude Code needs
-   - Ensure the optimized prompts leverage Claude Code's file system and tool capabilities
-
-**Expected Outcome:**
-A system where I can write naturally and get back polished, effective prompts that Claude Code can execute efficiently.
-
----
-Analysis:
-- Detected Language: General
-- Task Type: code  
-- Complexity: complex
-- Confidence: 87.3%
+**Ready to proceed with this task?**
 ```
 
 ### 🤖 **Interactive Mode Example**
 
-### Input:
-```
-"make my app faster"
-```
+**Input:** "make my app better"
 
-### Interactive Questions:
-1. What specific performance issues are you experiencing?
-2. What technology stack is your app using?
-3. Are there any specific areas of the app that are slower than others?
+**Questions Generated:**
+1. What specific aspect needs improvement (performance, readability, maintainability)?
+2. What technology stack or programming language are you using?
+3. Are there any constraints or requirements I should know about?
 
-### Answers:
-1. "Page load times are slow and API calls take too long"
-2. "React with Node.js backend and PostgreSQL database"  
-3. "The dashboard page and user profile pages"
-
-### Optimized Output:
-```
-I need to optimize the performance of a React application that has slow page load times and API response delays. Here's what I need you to do:
-
-**Context:**
-- Technology: React frontend with Node.js backend and PostgreSQL database
-- Issues: Slow page loads, API call latency
-- Problem areas: Dashboard page and user profile pages
-
-**Tasks:**
-1. **Frontend Analysis & Optimization:**
-   - Use Grep to find all React components in the dashboard and profile areas
-   - Analyze bundle size and identify code splitting opportunities
-   - Check for unnecessary re-renders and missing memoization
-   - Review image optimization and lazy loading implementation
-
-2. **Backend Performance Review:**
-   - Search for API endpoints serving dashboard and profile data
-   - Analyze database queries for N+1 problems or missing indexes
-   - Check caching implementation and opportunities
-
-3. **Monitoring Setup:**
-   - Create performance monitoring for the identified slow pages
-   - Add metrics tracking for API response times
-
-Please use your file system tools to analyze the codebase systematically and create a todo list for tracking all optimization tasks.
-```
+**After Answers:** Creates detailed, structured prompt with your specific requirements.
 
 ## Benefits
 
-✅ **Saves Time**: No more trial-and-error with prompt wording
-✅ **Better Results**: Prompts optimized for Claude Code's specific capabilities  
-✅ **Context Aware**: Understands your project and requirements
-✅ **Interactive**: Asks clarifying questions when needed
-✅ **Systematic**: Structures complex requests properly
+✅ **No Setup Required**: Works immediately after MCP configuration  
+✅ **No API Keys**: Uses only built-in Claude Code capabilities  
+✅ **Context Aware**: Understands your project and requirements  
+✅ **Interactive**: Asks clarifying questions when needed  
+✅ **Systematic**: Structures complex requests properly  
+✅ **Fast**: No external API calls for instant optimization
 
 ## Requirements
 
 - Node.js 16+ 
-- TypeScript support (tsx)
-- Anthropic API key
+- TypeScript support (tsx recommended)
 - Claude Code CLI
+- **No external API keys required**
+
+## Technical Details
+
+### Supported Languages
+- JavaScript/Node.js, TypeScript, Python, Java, C++, Rust, Go, PHP, Ruby, C#/.NET
+
+### Task Types
+- **Debug**: Bug fixing and error resolution
+- **Test**: Unit testing and test creation  
+- **Refactor**: Code improvement and restructuring
+- **Explain**: Code explanation and documentation
+- **Architecture**: System design and patterns
+- **Code**: General coding tasks (default)
+
+### Architecture
+- **Pure pattern matching** - no machine learning models
+- **Rule-based optimization** - deterministic and fast
+- **Session management** - for interactive conversations
+- **Built-in language detection** - regex-based patterns
 
 ## License
 
 MIT License - feel free to modify and distribute.
+
+## Installation Guide
+
+See [INSTALL.md](INSTALL.md) for detailed installation instructions, troubleshooting, and advanced configuration options.
