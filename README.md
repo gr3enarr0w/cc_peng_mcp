@@ -2,6 +2,10 @@
 
 An advanced Model Context Protocol (MCP) server that intelligently engineers and optimizes prompts for Claude Code, with interactive refinement capabilities and automatic optimization.
 
+<a href="https://glama.ai/mcp/servers/@gr3enarr0w/cc_peng_mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@gr3enarr0w/cc_peng_mcp/badge" alt="Claude Code Prompt Engineer MCP server" />
+</a>
+
 ## Features
 
 ### 🚀 **Intelligent Prompt Engineering**
